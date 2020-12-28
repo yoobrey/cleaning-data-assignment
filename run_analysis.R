@@ -9,6 +9,8 @@
 ##  all standard deviation values provided by the raw data
 ##
 
+library(dplyr)
+
 ## Check if raw data directory exists
 if (!dir.exists("./data/raw/UCI HAR Dataset")) {
   dir.create("./data/raw/")
@@ -64,8 +66,8 @@ featS <- grep("std()", features$V2, fixed = T)
 
 features$V2 <- gsub("()", "", features$V2, fixed = T) # Clean the feature names
 
-## Use the numbers to pick the appropriate columns and column names from the
-## feature sets, and add those to the respective data frames.
+## Index the column name from features.txt to serve as variable name, then
+## index the corresponding value column from the features set.
 for (col in featM) {
   testdf[, features[col, 2]] <- as.numeric(testset[, col])
   traindf[, features[col, 2]] <- as.numeric(trainset[, col])
@@ -78,6 +80,13 @@ for (col in featS) {
 
 ## Merge the data sets into one cohesive data set.
 unifiedset <- merge(testdf, traindf, all = T)
+
+## Group the data by subject, set type, and activity; compute all the means
+## across all variables.
+unifiedset <- 
+  data.frame(unifiedset %>%
+  group_by(SubjectID, SetType, Activity) %>%
+  summarize(across(everything(), list(mean))))
 
 ## Output as CSV to ./data directory.
 write.csv(unifiedset, "./data/processed_data.csv", row.names = F)
