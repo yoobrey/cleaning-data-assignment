@@ -24,6 +24,7 @@ The important processes and transformations performed on the raw data to arrive 
 1. The individual files for the subject IDs, activity types, and features measurements for both the training and test sets are read; each entry was given a proper label of what set they belong from within the data.
 1. The mean and standard deviation measurements from the features set were selected and taken as a subset.
 1. All relevant data for the test set and training set were combined (the training set and test set not yet merged); both sets were given proper and cleaned variable names.
+1. Activity names were substituted over numbers within both sets.
 1. The two sets are combined to form one unified set.
 1. Subject IDs, set types, and activity types were grouped together, and the mean of all the obtained measurements across the groupings were computed through R.
 1. The resulting data was written into a text file.
